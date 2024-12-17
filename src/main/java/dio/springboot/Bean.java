@@ -15,14 +15,15 @@ public class Bean {
 		return new Gson();
 	}
 	
-	@org.springframework.context.annotation.Bean
-//	@Scope("prototype")
-	public Remetente remetente() {
-		System.out.println("CRIANDO UM OBJETO REMETENTE");
-		Remetente remetente = new Remetente();
-		remetente.setEmail("noreply@teste.com.br");
-		remetente.setNome("Testando as testas na testada");
-		
-		return remetente;
-	}
+//	Aula3
+//	@org.springframework.context.annotation.Bean
+////	@Scope("prototype")
+//	public Remetente remetente() {
+//		System.out.println("CRIANDO UM OBJETO REMETENTE");
+//		Remetente remetente = new Remetente();
+//		remetente.setEmail("noreply@teste.com.br");
+//		remetente.setNome("Testando as testas na testada");
+//		
+//		return remetente;
+//	}
 }
