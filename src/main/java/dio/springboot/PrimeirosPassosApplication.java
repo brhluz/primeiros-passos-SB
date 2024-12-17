@@ -26,11 +26,11 @@ public class PrimeirosPassosApplication {
 
 	
 	// Main para a Aula3
-	@Bean
-	public CommandLineRunner run(SistemMensageria sistemMensageria) throws Exception{
-		return args -> {
-			sistemMensageria.enviarConfirmacaoCadastro();
-			sistemMensageria.enviarEmailBoasVindas();
-		};
-	}
+//	@Bean
+//	public CommandLineRunner run(SistemMensageria sistemMensageria) throws Exception{
+//		return args -> {
+//			sistemMensageria.enviarConfirmacaoCadastro();
+//			sistemMensageria.enviarEmailBoasVindas();
+//		};
+//	}
 }
