@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Scope;
 
 import com.google.gson.Gson;
 
-import dio.springboot.Aula3.Remetente;
+import dio.springboot.Aula6SpringData.domain.User;
 
 @Configuration
 public class Bean {
@@ -26,4 +26,11 @@ public class Bean {
 //		
 //		return remetente;
 //	}
+	
+	//Aula6
+	@org.springframework.context.annotation.Bean
+	@Scope("prototype")
+	public User user() {
+		return new User();
+	}
 }
