@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import dio.web.api.domain.Usuario;
+import dio.web.api.handler.BusinessException;
+import dio.web.api.handler.CampoObrigatorioException;
 
 @Repository
 public class UsuarioRepository {
@@ -15,7 +17,27 @@ public class UsuarioRepository {
 		System.out.println(usuario);
 	}
 
-	public void update(Usuario usuario) {
+	public void update(Usuario usuario){
+		
+//		if(usuario.getUserName()==null || usuario.getUserName().length()<=0) {
+//			throw new BusinessException("O Campo Login é Obrigatório");
+//		}
+		
+//		if(usuario.getUserName()==null || usuario.getUserName().length()<=0) {
+//			throw new Exception("O Campo Login é Obrigatório");
+//		}
+		
+		if(usuario.getUserName()==null || usuario.getUserName().length()<=0) {
+			throw new RuntimeException("O Campo Login é Obrigatório");
+		}
+		
+//		if(usuario.getUserName()==null || usuario.getUserName().length()<=0) {
+//			throw new CampoObrigatorioException("userName");
+//		}
+//		if(usuario.getSenha()==null || usuario.getSenha().length()<=0) {
+//			throw new CampoObrigatorioException("senha");
+//		}
+		
 		System.out.println("UPDATE - Recebendo o usuário na camada de repositório");
 		System.out.println(usuario);
 	}
