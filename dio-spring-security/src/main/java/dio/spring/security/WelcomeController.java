@@ -15,13 +15,13 @@ public class WelcomeController {
 	}
 	
 	@GetMapping("users")
-	@PreAuthorize("hasAnyRole('MANAGERS', 'USERS')")
+//	@PreAuthorize("hasAnyRole('MANAGERS', 'USERS')") // removido pois era usado na autenticacao simples
 	public String users() {
 		return "Authorized user";
 	}
 	
 	@GetMapping("managers")
-	@PreAuthorize("hasRole('MANAGERS')")
+//	@PreAuthorize("hasRole('MANAGERS')") // removido pois era usado na autenticacao simples
 	public String managers() {
 		return "Authorized manager";
 	}
