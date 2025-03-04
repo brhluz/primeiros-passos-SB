@@ -1,6 +1,7 @@
 package dio.spring.security;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,13 +17,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception { // Configuração das permissões:
 	
 		http.authorizeRequests()
-				.antMatchers("/").permitAll()	// antMatchers("/") e antMatchers("/login") → Permitem acesso irrestrito a essas rotas.
-				.antMatchers("/login").permitAll()
+				.antMatchers("/").permitAll()	// antMatchers("/") e antMatchers("/login") → Permitem acesso irrestrito a essas rotas, mas o login apenas para POST.
+				.antMatchers(HttpMethod.POST, "/login").permitAll()
 				.antMatchers("/users").hasAnyRole("USERS", "MANAGERS")	//Acessível para "USERS" e "MANAGERS".
 				.antMatchers("/managers").hasAnyRole("MANAGERS")	//antMatchers("/managers") → Acessível apenas para usuários com a role "MANAGERS".
 				.anyRequest().authenticated()	// Qualquer outra requisição exige autenticação.
 				.and()
-				.formLogin();	//Habilita autenticação via formulário.
+//				.formLogin();	//Habilita autenticação via formulário.
+				.httpBasic(); //Habilita autenticação basica
 	}
 	
 	
