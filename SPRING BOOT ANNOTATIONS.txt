@@ -1,0 +1,291 @@
+Estou salvando o projeto do curso no meu repositorio GIT !!!
+
+SPRING BOOT
+
+SCOPOS:
+- Singleton: unico objeto compartilhado por toda a aplicação, quando solicitacada. 
+- Prototype: criado uma nova instancia(objeto) a cada requisição ao container.
+
+Scopos Http :
+Request: Um Bean será criado para cada requisição Http
+Session: Um Bean será criado para a sessão do usuário
+Global: Ou Application Scope, cria um bean para o ciclo de vida do contexto da aplicação.
+
+@AutoWired
+uma anotação onde deverá ocorrer uma injeção automática de dependência:
+ - byName: é buscado um metodo set que corresponde ao nome do Bean
+ - byType: é considerado o tipo da classe para inclusão do Bean.
+ - byConstrutor: Usamos o construtor para incluir a dependência.
+ 
+ 
+==========================================================================================================================================
+Tem um starter para cada objetivo a ser atigido (jobs e etc)
+STARTER -> dependencia contendo varias outras dependencias necessarias para a construção do que eu quero, exemplo: HIBERNJATE JPA E BLA BLA BLA
+
+
+===================================================================================================================
+
+
+@SpringBootApplication
+public class PrimeirosPassosApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(PrimeirosPassosApplication.class, args);
+	}
+
+}
+essas linhas acima significa a inicialização da aplicação/container spring boot 
+
+para implementar o método main em uma aplicação spring boot, faça o seguinte:
+
+@Component
+public class MyApp implements CommandLineRunner{
+
+	@Autowired
+	private Calculadora calculadora;
+	
+	@Override
+	public void run(String... args) throws Exception {
+		// implementação
+		System.out.println(calculadora.soma(1, 2));
+	}
+
+}
+
+*-> Como informar que uma classe será um BEAN (Objeto gerenciado pelo spring, tipo @EJB/@Inject para um container.)
+	R: Utilize @Component
+	
+OBS: isso tudo acima é para standalone, aplicativos WAR, a inicialização do contexto spring é bem diferente, tem que configurar o servlet para tal.
+
+=================
+
+@Component -> utiliza-se quando se tem acesso ao codigo fonte
+@Bean -> quando é algo de terceiro. Permite configurar uma injeção personalisada tbm
+
+=================
+SpringBoot disponibilizou uma forma de lidar com arquivos .properties
+
+Propertie Value
+
+após colocar atributo no properties, acessa com a annotation abaixo:
+@Values
+Como usar:
+Arquivo Properties -> coloca nome=Bruno
+para declarar na variável:
+@Values("${nome}")
+tem uma maneira de definir valor default, caso a chave não seje encontrada no arquivo properties
+faz assim : @Values("${nome:Brunooooooooooo}") -> depois dos ":" é o valor default
+para pegar valor direto em texto: environment.getProperty("nome");
+
+=========================================================================================================================================================
+
+Configuration Properties
+seria outra forma de referenciar os valores do arquivo properties, mas utilizando de uma classe
+exemplo:
+
+Arquivo Properties:
+remetente.nome=Remetente Bruno
+remetente.email=brh_lopes@hotmail.com
+remetente.telefone=41998579691
+
+CLASSE:
+@Configuration
+@ConfigurationProperties(prefix = "remetente")
+public class Remetente {
+
+	private String nome;
+	private String email;
+	private Long telefone;
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Long getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(Long telefone) {
+		this.telefone = telefone;
+	}
+
+}
+exemplo de uso:
+@Component
+public class SistemsMensageria implements CommandLineRunner{
+
+	@Autowired
+	private Remetente remetente;
+	
+	@Override
+	public void run(String... args) throws Exception {
+		System.out.println("Nome: " + remetente.getNome() + "\nEmail: " + remetente.getEmail() + "\nTelefone: " + remetente.getTelefone());
+	}
+
+}
+
+==========================================================================================================================================================================
+Spring Data
+
+Cria uma interface e extend a interface JpaRepository<Classe,Id>();
+
+essa interface ja possui varias imlementações de metodos prontos do SpringData
+
+implemente para experimentar -> implementado na aula 6 e commitado no github
+
+
+
+
+==========================================================================================================================================================================
+JPA Repository
+
+utilizando da programação AOP (programação orientada a aspectos), o Spring Data implementa os metodos da interface do JpaRepository 
+implementada por minha interface sendo utilizada no projeto
+
+O Spring tbm consegue entender com base no nome do metodo personalizado de busca na minha interface, qual comando SQL executar. 
+para tal reconhecimento, é necessário utilizar as keywords do link abaixo, as keywords serão convertidas para os comandos SQL a serem executadas.
+Exemplo:
+BETWEEN -> Between, IsBetween (ex de metodo: findByBetweenDate())
+o spring gera automatico a implemntação assim:
+SELECT * FROM my_entity WHERE date BETWEEN ?1 AND ?2;
+
+https://docs.spring.io/spring-data/jpa/reference/repositories/query-keywords-reference.html
+
+
+para consultas mais especificas, onde os keywords não adiantam, tem como fazer uma consulta nativa, usando como anotação no metodo como query override.
+Ex:
+
+@Query(SELECT * FROM USUARIOS U WHERE U.NAME LIKE %:NAME%)
+List<User> filtrarPorNome(@Param(name) String name);
+
+DEVE TER COMO FAZER COM O CRITERIA, MAS AI TEM QUE PESQUISAR !!!
+
+
+@@ tente implementar para testar 
+==========================================================================================================================================================================
+
+https://docs.google.com/presentation/d/1jS5Ov8UCSnzgW3TLBcAsGrXo__kL6FOG/edit
+
+
+==========================================================================================================================================================================
+
+
+SWAGGER CONFIG
+
+@Configuration
+@EnableSwagger2
+public class SwaggerConfig {
+
+	private Contact contato() {
+		return new Contact("seu nome", "http://www.seusite.com.br", "voce@seusite.com.br");
+	}
+	
+	private ApiInfoBuilder informacoesApi() {
+		ApiInfoBuilder apiInfoBuilder = new ApiInfoBuilder();
+		
+		apiInfoBuilder.title("Title - Rest API");
+		apiInfoBuilder.description("API exemplo de uso de springboot REST API");
+		apiInfoBuilder.version("1.0");
+		apiInfoBuilder.termsOfServiceUrl("Termo de uso: Open Source");
+		apiInfoBuilder.license("Licença - Sua empresa");
+		apiInfoBuilder.licenseUrl("http://www.seusite.com.br");
+		apiInfoBuilder.contact(this.contato());
+		
+		return apiInfoBuilder;
+	}
+	
+	@Bean
+	public Docket detalheApi() {
+		Docket docket = new Docket(DocumentationType.SWAGGER_2);
+		
+		docket
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("dio.web.api.controller"))
+				.build()
+				.apiInfo(this.informacoesApi().build())
+				.consumes(new HashSet<String>(Arrays.asList("application/json")))
+				.produces(new HashSet<String>(Arrays.asList("application/json")));
+		
+		return docket;
+		
+	}
+	
+}
+
+------------------------------------------------------------------------------------
+
+Exceptions Handler For API
+
+1° Solução (não mt interessante em sistemas grandes)
+- fica no controller mesmo
+- utiliza declaração por anotação @ExceptionHandler
+ -- @ExceptionHandler({MinhaException.class})
+ 
+2° Solução (não mt uilizado, pois cria-se a necessidade de criar códigos explicitos e redundantes)
+- Utiliza de @ResponseStatus em classes de exceções personalizadas
+- Possibilita mapear as exceções para codigos de status http
+
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+public class RecursoNotFoundException extends RuntimeException {
+
+    public RecursoNotFoundException() {
+        super();
+    }
+
+    public RecursoNotFoundException(String message) {
+        super(message);
+    }
+}
+
+3° Solução (a melhor) RestControllerAdvice
+-- disponível no spring 3.2
+-permite utilizar um @ExceptionHandler Global com a anotação @ControllerAdvice.
+- a anotação @ControllerAdvice permite possuir varias ExceptionHandler em uma unica classe
+
+@Resource
+MessageSource -> Responsável por captar as mensagens de oriem das exceções das requisições http
+
+
+
+
+https://github.com/digitalinnovationone/dio-springboot
+
+UndeclaredThrowableException -> são exceções não verificadas.
+
+
+EM PROXYS
+Por que a exceção encapsulada vira uma UndeclaredThrowableException?
+A UndeclaredThrowableException é usada em proxies dinâmicos para encapsular exceções não declaradas na assinatura do método interceptado. Isso pode ocorrer com:
+
+Exceções verificadas (Exception) que não estão declaradas com throws.
+Algumas exceções não verificadas (RuntimeException) dependendo da lógica do proxy.
+Exemplo:
+
+------------------------------------------------------------------------------------------------------------------
+
+SPRING SECURITY
+
+@ -> Nada mais é do que filtros de servlet.
+
+apenas colocando o starter do spring security ele ja cria uma formulario de login com usuario e senha apresentada no console do spring
+mas esse usuario e senha a senha é alterada a cada nova instancia do servidor
+
+
+para fazer uma autenticação de login personalizada, deve-se criar uma classe de configuração que extende um adapter de segurança
+extends WebSecurityConfigurerAdapter
+@EnableWebSecurity -> uma maneira de indicar que estamos habilitando uma segurança de forma manual atraves da classe adaptada
+@EnableGlobalMethodSecurity(prePostEnabled = true) -> uma forma de garantir alguns recursos de forma global para segurança das requisições
+
+PAREI NA AULA 5 (JWT)
