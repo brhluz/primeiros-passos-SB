@@ -288,4 +288,22 @@ extends WebSecurityConfigurerAdapter
 @EnableWebSecurity -> uma maneira de indicar que estamos habilitando uma segurança de forma manual atraves da classe adaptada
 @EnableGlobalMethodSecurity(prePostEnabled = true) -> uma forma de garantir alguns recursos de forma global para segurança das requisições
 
-PAREI NA AULA 5 (JWT)
+--------------- JWT --------------
+
+JWT é composto por HEADER; PAYLOAD E SIGNATURE
+
+Payload é o corpo, o objeto em si que está sendo transimitido para a validação
+
+
+HEADER
+contém a tecnologia de algoritmo que está usando, exemplo HS256 e o tipo (JWT)
+
+PAYLOAD
+estrutura do objeto que corresponde a requisitos de autenticação e autorização
+	exemplos:
+		- subject: "bruno"
+		- name: "BRUNO HENRIQUE"
+		- roles: ["USERS", "MANAGERS"]
+
+
+
