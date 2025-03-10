@@ -298,12 +298,39 @@ Payload é o corpo, o objeto em si que está sendo transimitido para a validaç�
 HEADER
 contém a tecnologia de algoritmo que está usando, exemplo HS256 e o tipo (JWT)
 
-PAYLOAD
+PAYLOAD (JWTObject)
 estrutura do objeto que corresponde a requisitos de autenticação e autorização
 	exemplos:
 		- subject: "bruno"
 		- name: "BRUNO HENRIQUE"
 		- roles: ["USERS", "MANAGERS"]
 
+SIGNATURE
+maneira disponível para garantir e validar a autenticidade da estrutura do token que está sendo trafegada
 
 
+JWTObject
+uma estrutura q é um objeto que possui caracteristicas que serão convertidas em token
+- recomendado ter uma classe que representa o proprio token e o framework usa seuas ferramentas
+	de parse para converter em token/objeto
+é trabalhado atraves do JWTCreator
+
+JWTCreator -> criador do objeto
+
+UserNamePasswordAuthenticationToken -> objeto esperado pelo spring que é um authentication via token
+adiciona no contexto o username com SecurityContextHolder.getContext().setAuthentication(userToken);
+
+
+https://github.com/digitalinnovationone/dio-springboot
+
+Spring Security Tutorial - Toptal
+https://www.toptal.com/spring/spring-security-tutorial
+
+Spring Security Guide - Marco Behler
+https://www.marcobehler.com/guides/spring-security
+
+EnableWebSecurity vs EnableGlobalMethodSecurity - Baeldung
+https://www.baeldung.com/spring-enablewebsecurity-vs-enableglobalmethodsecurity
+
+Spring Security e JWT - GitBook
+https://app.gitbook.com/s/-MgwMOcm4UygF4VcCNlq/spring-security/spring-security-e-jwt
